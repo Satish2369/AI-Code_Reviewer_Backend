@@ -12,23 +12,28 @@ userRouter.post("/signup",async (req,res,next)=>{
 
 
    try{
-      const{name,emailId,photoUrl,password} = req.body;
+      const{name,emailId,password} = req.body;
 
       const existingUser = await User.findOne({ emailId });
     if (existingUser) {
-      return next(createError(400,"Email already exists"));
+      return next(createError(401,"Email already exists"));
     }
 
       const newUser=  new User({
          name,
          emailId,
-         photoUrl,
          password,
         
  
       })
  
       await newUser.save();
+
+      // jwt token generation
+     const token = jwt.sign({ _id: newUser._id }, "CodeReviewer", { expiresIn: "7d" });
+ 
+     // Set cookie with proper configuration
+     res.cookie("token", token);
 
      return res.send("The user has signed up successfully");
  
@@ -66,7 +71,7 @@ userRouter.post("/login", async (req, res, next) => {
      // Send a response
      return res.json({
        success: true,
-       message: `${user.name}`+" successfully loggedin",
+       message: `${user.name}`+ "successfully loggedin",
        
      });
  
@@ -108,9 +113,8 @@ userRouter.post("/login", async (req, res, next) => {
               name,emailId,history,photoUrl,gender
               
             }});
-
-
            }
+
            catch(err){
             return next(createError(500,err.message || "unable to get the profile data"));
            }

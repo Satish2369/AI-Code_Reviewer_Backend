@@ -9,7 +9,7 @@ const auth = async(req,res,next)=>{
 
      try{
         const {token} = req.cookies;
-
+       
 
          if(!token){
             return next(createError(500,"Plz loggin first"))
