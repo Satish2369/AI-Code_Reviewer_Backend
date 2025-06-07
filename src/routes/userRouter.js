@@ -33,7 +33,12 @@ userRouter.post("/signup",async (req,res,next)=>{
      const token = jwt.sign({ _id: newUser._id }, "CodeReviewer", { expiresIn: "7d" });
  
      // Set cookie with proper configuration
-     res.cookie("token", token);
+     res.cookie("token", token,{
+       httpOnly: true,     // Essential for security
+       secure: true,       // Must use with HTTPS
+       sameSite: 'none',   // Required for cross-domain (Vercel to Render)
+       maxAge: 24 * 60 * 60 * 1000, // 1 day expiration
+     });
 
      return res.send("The user has signed up successfully");
  
@@ -66,7 +71,12 @@ userRouter.post("/login", async (req, res, next) => {
      const token = jwt.sign({ _id: user._id }, "CodeReviewer", { expiresIn: "7d" });
  
      // Set cookie with proper configuration
-     res.cookie("token", token);
+     res.cookie("token", token,{
+      httpOnly: true,
+      secure: true,       // Must use with HTTPS
+       sameSite: 'none',   // Required for cross-domain (Vercel to Render)
+       maxAge: 24 * 60 * 60 * 1000 // 1 day expiration
+     });
  
      // Send a response
      return res.json({
