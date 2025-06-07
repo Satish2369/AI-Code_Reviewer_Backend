@@ -13,7 +13,7 @@ userRouter.post("/signup",async (req,res,next)=>{
 
    try{
       const{name,emailId,password} = req.body;
-
+      const SALT_ROUNDS = 10;
       const existingUser = await User.findOne({ emailId });
     if (existingUser) {
       return next(createError(401,"Email already exists"));
