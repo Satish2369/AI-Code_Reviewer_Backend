@@ -11,10 +11,9 @@ const corsOptions = {
   origin:
     process.env.NODE_ENV === "development"
       ? "http://localhost:5173"
-      : [
-          "https://ai-code-reviewer-frontend.onrender.com",
-          "https://ai-code-reviewer-frontend-6v5i.onrender.com"
-        ],
+      : 
+         "https://ai-code-reviewer-frontend-ochre.vercel.app"
+        ,
   credentials: true,
 };
 
