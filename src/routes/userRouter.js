@@ -13,19 +13,19 @@ userRouter.post("/signup",async (req,res,next)=>{
 
    try{
       const{name,emailId,password} = req.body;
-      const SALT_ROUNDS = 10;
+
       const existingUser = await User.findOne({ emailId });
     if (existingUser) {
       return next(createError(401,"Email already exists"));
     }
 
-      const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-
-    const newUser = new User({
-      name,
-      emailId,
-      password: hashedPassword,
-    });
+      const newUser=  new User({
+         name,
+         emailId,
+         password,
+        
+ 
+      })
  
       await newUser.save();
 
@@ -50,20 +50,19 @@ userRouter.post("/signup",async (req,res,next)=>{
 
 userRouter.post("/login", async (req, res, next) => {
    try {
- if (!emailId || !password) {
-      return next(createError(400, "Email and password are required"));
-    }
-
-    const user = await User.findOne({ emailId });
-    if (!user) {
-      return next(createError(404, "User not found"));
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return next(createError(401, "Invalid credentials")); 
-    }
-     //jwt token generation
+     const { emailId, password } = req.body;
+ 
+     const user = await User.findOne({ emailId: emailId });
+     if (!user) {
+       return next(createError(404, "User not found"));
+     }
+ 
+     const isMatch = await bcrypt.compare(password, user.password);
+     if (!isMatch) {
+       return next(createError(400, "Password is wrong"));
+     }
+ 
+     // jwt token generation
      const token = jwt.sign({ _id: user._id }, "CodeReviewer", { expiresIn: "7d" });
  
      // Set cookie with proper configuration
@@ -127,6 +126,3 @@ userRouter.post("/login", async (req, res, next) => {
  
 
 module.exports = userRouter;
-
-
-
