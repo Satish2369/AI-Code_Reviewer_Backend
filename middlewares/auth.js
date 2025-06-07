@@ -12,7 +12,7 @@ const auth = async(req,res,next)=>{
        
 
          if(!token){
-            return next(createError(500,"Plz loggin first"))
+            return next(createError(401,"please login first "))
          }
 
          //verify the jwt token
@@ -35,7 +35,7 @@ const auth = async(req,res,next)=>{
      catch(error){
 
 
-        return next(createError(500,err.message));
+        return next(createError(500,error.message || "authentication failed"));
 
 
      }

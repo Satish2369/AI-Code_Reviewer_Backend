@@ -59,7 +59,7 @@ userRouter.post("/login", async (req, res, next) => {
  
      const isMatch = await bcrypt.compare(password, user.password);
      if (!isMatch) {
-       return next(createError(400, "Password is wrong"));
+       return next(createError(400, "Invalid Credentials"));
      }
  
      // jwt token generation
@@ -106,13 +106,12 @@ userRouter.post("/login", async (req, res, next) => {
            try{
  
             const {user} = req;
-
             const {name,emailId,history,photoUrl,gender} = user;
 
             res.status(200).json({data:{
-              name,emailId,history,photoUrl,gender
-              
+                       name,emailId,history,photoUrl,gender
             }});
+            
            }
 
            catch(err){
