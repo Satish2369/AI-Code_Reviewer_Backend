@@ -6,13 +6,16 @@ const app = express();
 
 const cookieParser = require('cookie-parser');
 // Enhanced CORS configuration
+
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin:
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:5173"
+      : "https://ai-code-reviewer-frontend.onrender.com",
   credentials: true,
-  
 };
 
-app.use(cors());
+app.use(cors(corsOptions));
 
 
 
