@@ -19,13 +19,13 @@ userRouter.post("/signup",async (req,res,next)=>{
       return next(createError(401,"Email already exists"));
     }
 
-      const newUser=  new User({
-         name,
-         emailId,
-         password,
-        
- 
-      })
+      const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+
+    const newUser = new User({
+      name,
+      emailId,
+      password: hashedPassword,
+    });
  
       await newUser.save();
 
